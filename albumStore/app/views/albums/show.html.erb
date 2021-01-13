@@ -1,0 +1,87 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+<div id="li"><%= @album.name %></div>
+</p>
+
+<p>
+  <strong>Pic:</strong>
+  <img src=<%= @album.pic %> alt=<%= @album.pic %> width="165" height="60" />
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @album.description %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @album.price %>
+</p>
+
+<p>
+  <strong>Musician:</strong>
+  <%= @album.musician.name if @album.musician %>
+</p>
+
+<p>
+  <strong>Genre:</strong>
+  <%= @album.genre.name if @album.genre %>
+</p>
+
+<p>
+  <strong>Region:</strong>
+  <%= @album.region.name if @album.region %>
+</p>
+
+<p>
+  <strong>Sales:</strong>
+  <%= @album.sales %>
+</p>
+
+<p>
+  <strong>Stock:</strong>
+  <%= @album.stock %>
+</p>
+
+<% if current_user.nil? %>
+  <%= link_to 'like',  login_users_path , notice: 'Login First!'%> |
+  <%= link_to 'add to cart', login_users_path  , notice: 'Login First!'%>
+<% else current_user.nil?%>
+  <div id="follow_form">
+    <% if current_user.active_likes.find_by(album_id: @album.id) %>
+      <%= form_for(current_user.active_likes.find_by(album_id: @album.id),
+                   html: { method: :delete }) do |f| %>
+        <%= f.submit "Unfollow", class: "btn" %>
+      <% end %>
+    <% else%>
+    <%=  form_for(current_user.active_likes.build) do |f|  %>
+        <div><%=  hidden_field_tag :album_id, @album.id  %></div>
+        <div><%=  hidden_field_tag :user_id, current_user.id  %></div>
+    <%= f.submit "like", class: "btn btn-primary" %>
+    <% end %>
+      <% end %>
+  </div>
+
+  <div id="add_cart">
+    <% if current_user.active_carts.find_by(album_id: @album.id) %>
+      <%= form_for(current_user.active_carts.find_by(album_id: @album.id)) do |f| %>
+        <%= f.label "already in cart", class: "btn" %>
+      <% end %>
+    <% else%>
+      <%=  form_for(current_user.active_carts.build) do |f|  %>
+        <div><%=  hidden_field_tag :album_id, @album.id  %></div>
+        <div><%=  hidden_field_tag :user_id, current_user.id  %></div>
+        <div><%= f.label :number %></div>
+        <div><%= f.text_field :number %></div>
+        <%= f.submit "add to cart", class: "btn btn-primary" %>
+      <% end %>
+      </div>
+      <% end %>
+<% end %>
+
+
+<br>
+<%= link_to 'Edit', edit_album_path(@album) %> |
+<%= link_to 'Back', albums_path %>

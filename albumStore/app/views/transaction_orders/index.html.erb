@@ -1,0 +1,193 @@
+<p id="notice"><%= notice %></p>
+<SCRIPT>
+    function isHidden(oDiv){
+        var vDiv = document.getElementById(oDiv);
+        vDiv.style.display = (vDiv.style.display === 'none')?'block':'none';
+    }
+</SCRIPT>
+<h1>订单列表</h1>
+<% unless current_user.nil?%>
+  <% if current_user.role == "manager" %>
+
+    <DIV onclick="isHidden('div1')" ><h2><strong>已付款订单</strong></h2></DIV>
+    <DIV id="div1" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已付款" %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '已与消费者联系?' } %></td>
+              <%= form_with url: do_deliver_transaction_orders_path do %>
+                <%= hidden_field_tag :id, transaction_order.id %>
+                <%= hidden_field_tag :transaction_order, transaction_order %>
+                <%= hidden_field_tag :delivery_state, transaction_order.delivery_state %>
+                <%= submit_tag '发货' %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= "无已付款订单" unless tmp%>
+    </DIV>
+
+    <DIV onclick="isHidden('div2')" ><h2><strong>已发货订单</strong></h2></DIV>
+    <DIV id="div2" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已发货" %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '已与消费者联系?' } %></td>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无已发货订单" unless tmp%>
+    </DIV>
+
+    <DIV onclick="isHidden('div3')" ><h2><strong>已完成订单</strong></h2></DIV>
+    <DIV id="div3" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已完成" %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '已与消费者联系?' } %></td>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无已完成订单" unless tmp%>
+    </DIV>
+
+  <% else %>
+    <DIV onclick="isHidden('div4')" ><h2><strong>未支付订单</strong></h2></DIV>
+    <DIV id="div4" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "未支付" and transaction_order.user == current_user %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <%= link_to '订单详细信息', transaction_order %>
+            <%= link_to '编辑订单', edit_transaction_order_path(transaction_order) %>
+            <%= link_to '删除', transaction_order, method: :delete, data: { confirm: '确定删除?' } %>
+            <%= form_with url: do_pay_transaction_orders_path do %>
+              <%= hidden_field_tag :id, transaction_order.id %>
+              <%= hidden_field_tag :transaction_order, transaction_order %>
+              <%= hidden_field_tag :delivery_state, transaction_order.delivery_state %>
+              <%= submit_tag '支付' %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无未支付订单" unless tmp%>
+    </DIV>
+
+    <DIV onclick="isHidden('div5')" ><h2><strong>已付款订单</strong></h2></DIV>
+    <DIV id="div5" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已付款" and transaction_order.user == current_user  %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '确定删除?' } %></td>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无已付款订单" unless tmp%>
+    </DIV>
+
+    <DIV onclick="isHidden('div6') "><h2><strong>已发货订单</strong></h2></DIV>
+    <DIV id="div6" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已发货" and transaction_order.user == current_user  %>
+          <% tmp = false %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '确定删除??' } %></td>
+            <%= form_with url: do_receive_transaction_orders_path do %>
+              <%= hidden_field_tag :id, transaction_order.id %>
+              <%= hidden_field_tag :transaction_order, transaction_order %>
+              <%= hidden_field_tag :delivery_state, transaction_order.delivery_state %>
+              <%= submit_tag '确认收货' %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无已发货订单" unless tmp%>
+    </DIV>
+
+    <DIV onclick="isHidden('div7') "><h2><strong>已完成订单</strong></h2></DIV>
+    <DIV id="div7" style="display:none">
+      <% tmp = false %>
+      <% @transaction_orders.each do |transaction_order| %>
+        <% if transaction_order.delivery_state == "已完成" and transaction_order.user == current_user  %>
+          <% tmp = true %>
+          <div id = "li_order">
+            <strong>用户：</strong> <%= transaction_order.user.name %> <br/>
+            <strong>收货人姓名：</strong> <%= transaction_order.delivery_name %> <br/>
+            <strong>收货人地址：</strong> <%= transaction_order.delivery_address %> <br/>
+            <strong>收货人电话：</strong> <%= transaction_order.delivery_phone %> <br/>
+            <strong>收货人邮编：</strong> <%= transaction_order.delivery_postcode %> <br/>
+            <br/>
+            <strong>订单状态：</strong> <%= transaction_order.delivery_state %> <br/>
+            <strong>订单总金额：</strong> <%= transaction_order.amount %> <br/>
+            <td><%= link_to '订单详细信息', transaction_order %></td>
+            <td><%= link_to '删除', transaction_order, method: :delete, data: { confirm: '确定删除?' } %></td>
+          </div>
+        <% end %>
+      <% end %>
+      <%= "无已完成订单" unless tmp%>
+    </DIV>
+  <% end %>
+<% end %>

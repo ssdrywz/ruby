@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Album:</strong>
+  <%= @transaction_item.album %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @transaction_item.user %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @transaction_item.price %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @transaction_item.number %>
+</p>
+
+<%= link_to 'Edit', edit_transaction_item_path(@transaction_item) %> |
+<%= link_to 'Back', transaction_items_path %>

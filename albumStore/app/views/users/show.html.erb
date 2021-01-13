@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @user.role %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<% if @user.role == "customer" %>
+<div id="customer">
+  <p>
+    <strong>Money:</strong>
+    <%= @user.money %>
+  </p>
+
+  <p>
+  <strong>Cart:</strong>
+    <% @user.active_carts.each { |cart|  %>
+      <strong> Album:</strong> <%=  cart.album.name  %>
+    <%  } %>
+  </p>
+  <p>
+    <strong>Like:</strong>
+    <% @user.active_likes.each { |cart|  %>
+      <strong> Album:</strong> <%=  cart.album.name  %>
+    <%  } %>
+  </p>
+</div>
+<% else %>
+  <div id="manager">
+    <% for @order in TransactionOrder.all%>
+      <% if @order.delivery_state == "已付款" %>
+        <%= link_to 'deal', transaction_order_path(@order) %><br/>
+        <%= @order.user.name + "   " %>
+        <%= @order.amount %><br/>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', albums_path %><br/>
+<%= link_to 'Logout', logout_users_path %>

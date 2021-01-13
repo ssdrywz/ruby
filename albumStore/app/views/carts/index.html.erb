@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<h1>购物车</h1>
+<% tmp = false %>
+  <% @carts.each do |cart| %>
+    <% if cart.user == current_user%>
+    <% tmp = true %>
+    <% album = cart.album %>
+    <div id = "li_album">
+      <div id="li_album_right"><img src=<%= album.pic %> alt=<%= album.pic %> width="200" height="200" /></div>
+      <div id=li_album_right_w>
+        <div id="name"> <%= album.name %><br/></div>
+        介绍：<%= album.description %><br/>
+        音乐人：<%= album.musician.name if album.musician %><br/>
+        种类：<%= album.genre.name if album.genre %><br/>
+        地区：<%= album.region.name if album.region %><br/>
+        价格：<%= album.price %><br/>
+        已售：<%= album.sales.to_i %><br/>
+        库存：<%= album.stock.to_i %><br/>
+        <br/>
+        数量：<%= cart.number.to_i %><br/>
+        总价：<%= cart.price %><br/>
+        <br/>
+        <%= link_to '商品详情', album %><br/>
+        <%= link_to '从购物车中删除商品', cart, method: :delete, data: { confirm: '确认删除?' } %>
+      </div>
+    </div>
+    <% end %>
+  <% end %>
+<strong><%= "购物车是空的~" unless tmp%></strong>
+<% if tmp %>
+<h2><strong>生成订单</strong></h2>
+<%=  form_for [@tansaction_order, TransactionOrder.new ] do |form|  %>
+  <div><%=  hidden_field_tag :user_id, current_user.id  %></div>
+  <div class="field">
+    <%= form.label :delivery_name %>
+    <%= form.text_field :delivery_name %>
+  </div>
+  <div class="field">
+    <%= form.label :delivery_address %>
+    <%= form.text_field :delivery_address %>
+  </div>
+  <div class="field">
+    <%= form.label :delivery_phone %>
+    <%= form.number_field :delivery_phone %>
+  </div>
+  <div class="field">
+    <%= form.label :delivery_postcode %>
+    <%= form.number_field :delivery_postcode %>
+  </div>
+  <%= form.submit "sub", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+<br>

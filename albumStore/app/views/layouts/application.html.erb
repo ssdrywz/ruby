@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <title>AlbumStore</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  <body>
+  <div id="left-panel">
+
+
+    <br/>
+    <% if current_user %>
+      <div id = "li">
+        当前用户:<br/>
+         <%= link_to current_user.name, user_path(current_user),:style=>"color:white" %>
+      </div>
+
+      <%#= link_to 'Logout', logout_users_path %>
+
+      <% if current_user.role == "manager" %>
+
+        <div id = "li"> <%= link_to '所有订单', transaction_orders_url,:style=>"color:white" %> </div>
+        <div id = "li"> <%= link_to '所有商品', albums_path ,:style=>"color:white"%> </div>
+
+      <% else %>
+        <div id = "li"> <%= link_to '我的收藏', favorites_path ,:style=>"color:white"%> </div>
+        <div id = "li"> <%= link_to '我的购物车', carts_path ,:style=>"color:white"%> </div>
+        <div id = "li"> <%= link_to '我的订单', transaction_orders_url ,:style=>"color:white"%> </div>
+        <div id = "li"> <%= link_to '唱片商城', albums_path ,:style=>"color:white"%> </div>
+      <% end %>
+
+    <% else %>
+
+      <div id = "li">
+        请先 <%= link_to '登陆', login_users_path ,:style=>"color:white"%> <br/>
+        或 <%= link_to '注册',new_user_path ,:style=>"color:white"%>
+      </div>
+      <div id = "li"> <%= link_to '唱片商城', albums_path ,:style=>"color:white"%> </div>
+    <% end %>
+
+    <div id = "li">  </div>
+    <div id = "li"> <%= link_to '帮助文档', help_index_path ,:style=>"color:white"%> </div>
+  </div>
+
+  <div id="main-panel">
+    <%= yield %>
+  </div>
+  </body>
+
+</html>

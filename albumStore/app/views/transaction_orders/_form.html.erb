@@ -1,0 +1,57 @@
+<%= form_with(model: transaction_order, local: true) do |form| %>
+  <% if transaction_order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(transaction_order.errors.count, "error") %> prohibited this transaction_order from being saved:</h2>
+
+      <ul>
+      <% transaction_order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<!--  <div class="field">-->
+    <%#= form.label :transaction_item_id %>
+    <%#= form.text_field :transaction_item_id %>
+<!--  </div>-->
+
+<!--  <div class="field">-->
+    <%#= form.label :user_id %>
+    <%#= form.text_field :user_id %>
+<!--  </div>-->
+
+  <div class="field">
+    <%= form.label :delivery_name %>
+    <%= form.text_field :delivery_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :delivery_address %>
+    <%= form.text_field :delivery_address %>
+  </div>
+
+  <div class="field">
+    <%= form.label :delivery_phone %>
+    <%= form.number_field :delivery_phone %>
+  </div>
+
+  <div class="field">
+    <%= form.label :delivery_postcode %>
+    <%= form.number_field :delivery_postcode %>
+  </div>
+
+<!--  <div class="field">-->
+    <%#= form.label :delivery_state %>
+    <%#= form.text_field :delivery_state %>
+<!--  </div>-->
+
+<!--  <div class="field">-->
+    <%#= form.label :amount %>
+    <%#= form.text_field :amount %>
+<!--  </div>-->
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

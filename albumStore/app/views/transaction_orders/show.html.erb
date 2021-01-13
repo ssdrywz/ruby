@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<h1>订单详情</h1>
+<div id = "li_order">
+  <strong>用户：</strong> <%= @transaction_order.user.name %> <br/>
+  <strong>收货人姓名：</strong> <%= @transaction_order.delivery_name %> <br/>
+  <strong>收货人地址：</strong> <%= @transaction_order.delivery_address %> <br/>
+  <strong>收货人电话：</strong> <%= @transaction_order.delivery_phone %> <br/>
+  <strong>收货人邮编：</strong> <%= @transaction_order.delivery_postcode %> <br/>
+  <br/>
+  <strong>订单状态：</strong> <%= @transaction_order.delivery_state %> <br/>
+  <strong>订单总金额：</strong> <%= @transaction_order.amount %> <br/>
+</div>
+  <h2><strong>订单商品</strong></h2>
+  <% TransactionItem.all.each { |item| %>
+    <%  if item.transactionOrder == @transaction_order  %>
+      <% album = item.album %>
+      <div id = "li_album">
+        <div id="li_album_right"><img src=<%= album.pic %> alt=<%= album.pic %> width="200" height="200" /></div>
+        <div id=li_album_right_w>
+          <div id="name"> <strong><%= album.name %></strong><br/></div>
+          介绍：<%= album.description %><br/>
+          音乐人：<%= album.musician.name if album.musician %><br/>
+          种类：<%= album.genre.name if album.genre %><br/>
+          地区：<%= album.region.name if album.region %><br/>
+          价格：<%= album.price %><br/>
+          已售：<%= album.sales.to_i %><br/>
+          库存：<%= album.stock.to_i %><br/>
+          <br/>
+          购买数量：<%= item.number %>
+          购买总额：<%= item.price %>
+          <br/>
+          <%= link_to '商品详情', album %><br/>
+          <% if (not current_user.nil?) and current_user.role=="manager" %>
+            <%= link_to '编辑商品', edit_album_path(album) %><br/>
+            <%= link_to '删除商品', album, method: :delete, data: { confirm: 'Are you sure?' } %><br/>
+          <% else unless current_user.nil? %>
+<!--              change the number of order in this item -->
+<!--              delect this item-->
+            <%  end %>
+          <% end %>
+        </div>
+      </div>
+   <%  end  %>
+  <%  } %>
+
+
+
+<% if @transaction_order.delivery_state == "未支付" and current_user.role == "customer"%>
+<%= form_with url: do_pay_transaction_orders_path do %>
+  <%= hidden_field_tag :id, @transaction_order.id %>
+  <%= hidden_field_tag :transaction_order, @transaction_order %>
+  <%= hidden_field_tag :delivery_state, @transaction_order.delivery_state %>
+  <%= submit_tag '支付' %>
+  <% end %>
+<% elsif @transaction_order.delivery_state == "已付款" and current_user.role == "manager"%>
+  <%= form_with url: do_deliver_transaction_orders_path do %>
+    <%= hidden_field_tag :id, @transaction_order.id %>
+    <%= hidden_field_tag :transaction_order, @transaction_order %>
+    <%= hidden_field_tag :delivery_state, @transaction_order.delivery_state %>
+    <%= submit_tag '发货' %>
+  <% end %>
+<% elsif @transaction_order.delivery_state == "已发货" and current_user.role == "customer"%>
+  <%= form_with url: do_receive_transaction_orders_path do %>
+    <%= hidden_field_tag :id, @transaction_order.id %>
+    <%= hidden_field_tag :transaction_order, @transaction_order %>
+    <%= hidden_field_tag :delivery_state, @transaction_order.delivery_state %>
+    <%= submit_tag '确认收货' %>
+  <% end %>
+<% end %>
+<%= link_to '删除', @transaction_order, method: :delete, data: { confirm: '已与消费者联系?' } %>
+
+<%= link_to 'delect', @user, method: :delete, data: { confirm: 'Are you sure?' } %><br/>
+<%= link_to 'Edit', edit_transaction_order_path(@transaction_order) %> |
+<%= link_to 'Back', user_path(current_user) %>

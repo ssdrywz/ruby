@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  pic: MyString
+  description: MyString
+  price: 
+  sales: 
+  stock: 
+  region: one
+  genre: one
+  musician: one
+
+two:
+  name: MyString
+  pic: MyString
+  description: MyString
+  price: 
+  sales: 
+  stock: 
+  region: two
+  genre: two
+  musician: two
