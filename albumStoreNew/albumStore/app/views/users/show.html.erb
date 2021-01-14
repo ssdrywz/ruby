@@ -1,0 +1,89 @@
+<p id="notice" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"><%= notice %></p>
+<h1>个人界面</h1>
+<!--  <img src=<%#= @user.picture %> alt=<%#= @user.picture %> width="200" height="200" />-->
+<img src=<%= @user.picture %>  width="200" height="200" />
+    <h2><strong>
+      <div id="li"><%= @user.name %></div>
+    </strong></h2>
+    <div id="li">
+      <strong>邮箱：</strong><%= @user.email %><br/>
+      <strong>用户类型：</strong><%= @user.role=="manager"?"管理员":"用户" %><br/>
+      <% unless @user.role=="manager"%> <strong>余额：</strong><%= @user.money %><% end %>
+    </div>
+    <div id="li">
+      <strong>创建时间：</strong><%= @user.created_at %><br/>
+      <strong>修改时间：</strong><%= @user.updated_at %>
+    </div>
+    <div id="li">
+      <strong><%= link_to '编辑', edit_user_path(@user)  %></strong>&emsp;&emsp;&emsp;
+      <strong><%= link_to '登出', logout_users_path %></strong><br/>
+    </div>
+  <div id="li">
+    <% unless @user.role=="manager"%>
+      <h2>默认订单信息：</h2><br/>
+      <strong>收货人：</strong><%= @user.deliveryname %><br/>
+      <strong>收货地址：</strong><%= @user.deliveryaddress %><br/>
+      <strong>收货邮编：</strong><%= @user.deliverypostcode %><br/>
+      <strong>收货人电话：</strong><%= @user.deliveryphone %><br/>
+    <% end %>
+  </div>
+
+<% if @user.role == "customer" %>
+  <div id="li">
+    <h2><strong><%= link_to '我的购物车:', carts_path %></strong></h2><br/>
+    <% @user.active_carts.each { |cart|  %>
+      <strong>商品：</strong> <%= link_to cart.album.name, album_path(cart.album) %><br/>
+    <%  } %>
+  </div>
+  <div id="li">
+    <h2><strong><%= link_to '我的收藏:', favorites_path %></strong></h2><br/>
+    <% @user.active_likes.each { |cart|  %>
+      <strong> 商品：</strong> <%= link_to cart.album.name, album_path(cart.album) %><br/>
+    <%  } %>
+  </div>
+  <div id="li">
+    <h2><strong><%= link_to '我的订单：', transaction_orders_url %></strong></h2><br/>
+    <% for order in TransactionOrder.all do%>
+      <% if order.user == @user %>
+      <strong> <%= link_to '订单状态：' , transaction_order_path(order)%></strong> <%=  order.delivery_state  %><br/>
+      <%  end %>
+   <% end %>
+  </div>
+  <div id="li">
+    <h2><strong>充值</strong></h2><br/>
+    <%= form_with url: add_credit_users_path do |f|%>
+      <%= hidden_field_tag :id, @user.id %>
+      <div class="field">
+        <%= f.label "充值金额" %>
+        <%= f.number_field :money %>
+      </div>
+      <%= f.submit '确认充值' %>
+      <% end %>
+  </div>
+<% else %>
+  <div id="li">
+    <h2><strong><%= link_to '订单：', transaction_orders_url %></strong></h2><br/>
+    <table>
+      <thead>
+      <tr>
+        <th></th>
+        <th>用户</th>
+        <th>订单状态</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% TransactionOrder.all.each do |order| %>
+        <tr>
+          <td><strong> <%= link_to '订单：' , transaction_order_path(order)%></strong></td>
+          <td><%= order.user.name %></td>
+          <td><%= order.delivery_state %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<input type="button" name="Submit" onclick="javascript:history.back();" value="返回">

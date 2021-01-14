@@ -1,0 +1,42 @@
+<%= form_with(model: transaction_order, local: true) do |form| %>
+  <% if transaction_order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(transaction_order.errors.count, "error") %> prohibited this transaction_order from being saved:</h2>
+
+      <ul>
+      <% transaction_order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "收货人" %>
+    <%= form.text_field :delivery_name %>
+  </div></div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "收货地址" %>
+    <%= form.text_field :delivery_address %>
+  </div></div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "收货人电话" %>
+    <%= form.number_field :delivery_phone %>
+  </div></div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "收货邮编" %>
+    <%= form.number_field :delivery_postcode %>
+  </div></div>
+
+
+  <div class="actions">
+    <%= form.submit '确认修改'%>
+  </div>
+<% end %>

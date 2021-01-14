@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Album:</strong>
+  <%= @transaction_item.album %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @transaction_item.user %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @transaction_item.price %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @transaction_item.number %>
+</p>
+
+<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回">

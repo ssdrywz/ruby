@@ -1,0 +1,69 @@
+<p id="notice"><%= notice %></p>
+<h1>商品详情</h1>
+
+<!--  <img src=<%#= @album.pic %> alt=<%#= @album.pic %> width="400" height="400" />-->
+<img src=<%= @album.pic %>  width="400" height="400" />
+
+<h2><strong>
+  <div id="li"><%= @album.name %></div>
+</strong></h2>
+<div id="li"><strong>
+<% if current_user.role == "manager"%>
+  <%= link_to '编辑', edit_album_path(@album) %> <br/><% end %></strong></div>
+<div id="li">
+  <strong> 描述： </strong><br/>
+  <%= @album.description %>
+</div>
+
+<div id="li">
+  <strong>地区：</strong>
+  <%= @album.genre.name if @album.genre %><br/>
+  <strong>音乐人：</strong>
+  <%= @album.musician.name if @album.musician %><br/>
+  <strong>种类：</strong>
+  <%= @album.region.name if @album.region %><br/>
+</div>
+
+<div id="li">
+  <strong>价格：</strong>
+  <%= @album.price %>
+  <strong>销售量：</strong>
+  <%= @album.sales.to_i %>
+  <strong>库存量：</strong>
+  <%= @album.stock.to_i %>
+</div>
+
+<% if current_user.nil? %>
+  <%= link_to '收藏',  login_users_path , notice: 'Login First!'%> |
+  <%= link_to '加入购物车', login_users_path  , notice: 'Login First!'%>
+<% elsif current_user.role == "customer"%>
+  <div id="follow_form">
+    <% if current_user.active_likes.find_by(album_id: @album.id) %>
+      <%= form_for(current_user.active_likes.find_by(album_id: @album.id),
+                   html: { method: :delete }) do |f| %>
+        <%= f.submit "取消收藏", class: "btn" %>
+      <% end %>
+    <% else%>
+    <%=  form_for(current_user.active_likes.build) do |f|  %>
+        <div><%=  hidden_field_tag :album_id, @album.id  %></div>
+        <div><%=  hidden_field_tag :user_id, current_user.id  %></div>
+    <%= f.submit "收藏", class: "btn btn-primary" %>
+    <% end %>
+      <% end %>
+  </div>
+
+  <div id="add_cart">
+      <%=  form_for(current_user.active_carts.build) do |f|  %>
+        <div><%=  hidden_field_tag :album_id, @album.id  %></div>
+        <div><%=  hidden_field_tag :user_id, current_user.id  %></div>
+        <div><%= f.label :number %></div>
+        <div><%= f.text_field :number %></div>
+        <%= f.submit "加入购物车", class: "btn btn-primary" %>
+      <% end %>
+      </div>
+<% end %>
+
+
+<br>
+
+<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回">

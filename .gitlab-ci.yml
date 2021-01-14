@@ -1,0 +1,21 @@
+test:
+  stage: test
+  script:
+    - cd project
+    - bundle install
+    - rails db:migrate RAILS_ENV=test
+    - rails test
+  only:
+    - albumStore
+
+deploy:
+  stage: deploy
+  script:
+    - puma-stop 5000
+    - rsync -arv --delete ./albumStore ~
+    - cd ~/albumStore
+    - bundle install
+    - rails db:migrate
+    - nohup rails server -d -b 0.0.0.0 -p 5000 &
+  only:
+    - albumStore

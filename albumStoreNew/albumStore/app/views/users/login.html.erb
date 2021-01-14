@@ -1,0 +1,8 @@
+<h1>请登陆</h1>
+<h2><%= alert %></h2>
+
+<%= form_with url: do_login_users_path do %>
+  <p>  用户名: <%= text_field_tag :name %>  </p>
+  <p>  密码  : &emsp;<%= password_field_tag :password %>  </p>
+  <%= submit_tag '登陆' %>
+<% end %>

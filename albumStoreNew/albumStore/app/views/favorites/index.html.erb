@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Favorites</h1>
+<% tmp = false %>
+    <% @favorites.each do |favorite| %>
+      <% if favorite.user == current_user %>
+    <% tmp = true %>
+        <% album = favorite.album %>
+        <div id = "li_album">
+          <div id="li_album_right"><img src=<%= album.pic %> width="200" height="200" /></div>
+<!--          <div id="li_album_right"><img src=<%#= album.pic %> alt=<%#= album.pic %> width="200" height="200" /></div>-->
+          <div id=li_album_right_w>
+            <div id="name"> <%= album.name %><br/></div>
+            介绍：<%= album.description %><br/>
+            音乐人：<%= album.musician.name if album.musician %><br/>
+            种类：<%= album.genre.name if album.genre %><br/>
+            地区：<%= album.region.name if album.region %><br/>
+            价格：<%= album.price %><br/>
+            已售：<%= album.sales.to_i %><br/>
+            库存：<%= album.stock.to_i %><br/>
+            <%= link_to '商品详情', album %><br/>
+            <br/>
+            <%= form_for(current_user.active_likes.find_by(album_id: album.id),
+                         html: { method: :delete }) do |f| %>
+              <%= f.submit "取消收藏", class: "btn" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+<strong><%= "收藏夹是空的~" unless tmp%></strong>

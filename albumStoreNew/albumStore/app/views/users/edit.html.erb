@@ -1,0 +1,71 @@
+<h1>Editing User</h1>
+<% user = @user %>
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div id="li">
+  <div class="field">
+    <%= form.label "用户名" %>
+    <%= form.text_field :name %>
+  </div>
+  </div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "密码" %>
+    <%= form.text_field :password %>
+  </div></div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "邮箱" %>
+    <%= form.text_field :email %>
+  </div></div>
+
+  <div id="li">
+  <div class="field">
+    <%= form.label "头像路径" %>
+    <%= form.text_field :picture %>
+  </div></div>
+
+  <% unless user.role == "manager" %>
+    <strong><h2>默认订单信息：</h2></strong>
+    <div id="li">
+      <div class="field">
+        <%= form.label "收货人" %>
+        <%= form.text_field :deliveryname %>
+      </div></div>
+    <div id="li">
+      <div class="field">
+        <%= form.label "收货地址" %>
+        <%= form.text_field :deliveryphone %>
+      </div></div>
+
+    <div id="li">
+      <div class="field">
+        <%= form.label "收货邮编" %>
+        <%= form.number_field :deliveryaddress %>
+      </div></div>
+
+    <div id="li">
+      <div class="field">
+        <%= form.label "收货人电话" %>
+        <%= form.number_field :deliverypostcode %>
+      </div></div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit '确认' %>
+  </div>
+<% end %>
+
+<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回">

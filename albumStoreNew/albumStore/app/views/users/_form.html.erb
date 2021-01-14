@@ -1,0 +1,47 @@
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div id="li">
+    <div class="field">
+      <%= form.label "用户名" %>
+      <%= form.text_field :name %>
+    </div>
+  </div>
+
+  <div id="li">
+    <div class="field">
+      <%= form.label "密码" %>
+      <%= form.text_field :password %>
+    </div></div>
+
+  <div id="li">
+    <div class="field">
+      <%= form.select :role, ["管理员", "用户"] %></div></div>
+
+  <div id="li">
+    <div class="field">
+      <%= form.label "邮箱" %>
+      <%= form.text_field :email %>
+    </div></div>
+
+  <div id="li">
+    <div class="field">
+      <%= form.label "头像路径" %>
+      <%= form.text_field :picture %>
+    </div></div>
+
+
+
+  <div class="actions">
+    <%= form.submit '确认注册'%>
+  </div>
+<% end %>
